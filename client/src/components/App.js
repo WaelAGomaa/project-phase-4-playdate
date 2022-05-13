@@ -8,6 +8,8 @@ import Settings from './Settings';
 import Login from "./Login";
 
 function App(){
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [playdates, setPlaydates] = useState([]);
   const [currentUser, setCurrentUser] = useState();
   const [user, setUser] = useState({
   username: '',
@@ -22,17 +24,34 @@ function App(){
   emergency: false,
   admin: false,
   });
-  const [playdates, setPlaydate] = useState(null);
 
 
+  useEffect(() =>{
+  fetch('/authorized_user')
+  .then(res => res.json())
+  .then(data => {
+    if(data.errors){
+        console.log(data.errors)
+    } else {
+        setCurrentUser(data);
+      }
+    })},[])
+
+
+  useEffect(() =>{
+    fetch('/playdates')
+    .then(res => res.json())
+    .then(data => setPlaydates(data))
+    },[])
+  
   return (
     <div className="App">
       <NavBar />
       <Switch>
-      <Route path="/Home"><Home playdates={playdates} setPlaydate={setPlaydate}/></Route>
+      <Route path="/Home"><Home playdates={playdates} setPlaydates={setPlaydates}/></Route>
       <Route path="/Request"><Request playdates={playdates}/></Route>
-      <Route path="/ProfileInfo"><ProfileInfo setCurrentUser={setCurrentUser} user={user} setUser={setUser}/></Route>
-      <Route path="/Settings"><Settings setUser={setUser} user={user} /></Route>
+      <Route path="/ProfileInfo"><ProfileInfo  currentUser={currentUser} setCurrentUser={setCurrentUser} user={user} setUser={setUser}/></Route>
+      <Route path="/Settings"><Settings setUser={setUser} user={user} setIsAuthenticated={setIsAuthenticated} setCurrentUser={setCurrentUser} currentUser={currentUser}/></Route>
       <Route path="/Login"><Login user={user} setUser={setUser} currentUser={currentUser} setCurrentUser={setCurrentUser} /></Route>
       </Switch>
     </div>

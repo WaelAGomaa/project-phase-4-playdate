@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Auth from "./Auth";
 function Login({ user, setUser, setCurrentUser}) {
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const [isShow, setShow] = useState(false);
   const [errors, setErrors] = useState([]);
 

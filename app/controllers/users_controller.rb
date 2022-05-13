@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    before_action :authorized, only: [:create]
+    skip_before_action :authorized, only: [:create]
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
     def index 
@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     end
 
     def create
+
         user = User.create!(user_params)
         render json: user
     end
@@ -21,10 +22,20 @@ class UsersController < ApplicationController
         render json: receiver, status: :ok
     end
 
+    def update
+        current_user = User.find(params[:id])
+        current_user.update!(user_params)
+        render json: current_user, status: :ok
+    end
+    def destroy
+        current_user = User.find(params[:id])
+        current_user.destroy
+        head :no_content
+    end
     private
 
     def user_params
-        params.permit(:username, :email, :admin, :image, :name, :age, :emergency, :address, :nightOwl, :early)
+        params.permit(:username, :email, :admin, :image, :name, :age, :emergency, :address, :nightOwl, :early, :password)
     end
 
     def record_invalid(invalid)

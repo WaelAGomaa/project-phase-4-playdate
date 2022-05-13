@@ -1,33 +1,33 @@
 import {Link } from 'react-router-dom';
 
-function Settings({setIsAuthenticated, setUser, user}) {
+function Settings({setIsAuthenticated, setUser, user, setCurrentUser, currentUser}) {
 
-    console.log(user)
+    console.log(currentUser)
     const logout = () => {
         fetch('/logout',{
             method:'DELETE'
         })
         .then(()=>{
             setIsAuthenticated(false)
-            setUser(null)
+            setCurrentUser(null)
         })
     }
     const deleteAccount = () => {
-        fetch('/users',{
+        fetch(`/users/${currentUser.id}`,{
             method:'DELETE'
         })
         .then(()=>{
             setIsAuthenticated(false)
-            setUser(null)
+            setCurrentUser(null)
         })
     }
     return (
         <div className="template">
             <h1>Settings</h1>
-            <button className="button" onClick={deleteAccount}>delete</button>
 
             <div>
                 <button className="button" onClick={logout}>Logout</button>
+            <button className="button" onClick={deleteAccount}>delete</button>
                 <h3><Link className="button" to="/home"> Home</Link></h3>
             </div>
         </div>

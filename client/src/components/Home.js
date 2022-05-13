@@ -9,7 +9,7 @@ function Home({playdates}){
     date={playdate.date}
     user={playdate.user}
     parent={playdate.parent}
-    playdates={playdate}
+    playdate={playdate}
     /></>)
 console.log(playdates);
 return (
